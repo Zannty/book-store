@@ -1,0 +1,27 @@
+.header {
+  display: flex;
+  border-bottom: 1px solid black;
+  margin-bottom: 1em;
+  justify-content: space-between;
+}
+.logo-text:hover {
+  text-decoration: none;
+}
+.logo-text {
+  font-family: "Lato", sans-serif;
+  color: black;
+  font-size: 2.5em;
+  padding-left: 1em;
+}
+
+.header .shopping-cart {
+  align-self: center;
+  font-size: 1.3em;
+  padding-right: 1em;
+}
+
+.header .shopping-cart .cart-icon {
+  font-size: 2.2em;
+  color: cadetblue;
+  margin-right: 10px;
+}

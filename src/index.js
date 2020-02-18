@@ -1,12 +1,42 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import "./index.css";
+import thunkMiddleware from "redux-thunk";
+import App from "./components/App/App";
+import { createStore, applyMiddleware } from "redux";
+import reducer from "./reducers";
+import { BrowserRouter } from "react-router-dom";
+import BookStoreService from "./services/BookStoreService";
+import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
+import { BookStoreServiceProvider } from "./components/ServiceContext/ServiceContext";
+const logMiddleware = store => next => action => {
+  console.log(action.type, store.getState());
+  return next(action);
+};
+const stringMiddleware = store => next => action => {
+  if (action === "string") {
+    return next({
+      type: action
+    });
+  }
+  return next(action);
+};
+const store = createStore(
+  reducer,
+  applyMiddleware(thunkMiddleware, stringMiddleware, logMiddleware)
+);
+const bookStoreService = new BookStoreService();
 
-ReactDOM.render(<App />, document.getElementById('root'));
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+ReactDOM.render(
+  <Provider store={store}>
+    <ErrorBoundary>
+      <BookStoreServiceProvider value={bookStoreService}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </BookStoreServiceProvider>
+    </ErrorBoundary>
+  </Provider>,
+  document.getElementById("root")
+);
